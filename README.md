@@ -27,7 +27,7 @@
 
 - **Framework**: PHP (Laravel)
 - **Database**: PostgreSQL
-- **Message Broker**: Apache Kafka или RabbitMQ
+- **Message Broker**: RabbitMQ
 - **Cache**: Redis (для дедубликации и контроля лимитов)
 - **Gateways**: Классы-заглушки (моки) для имитации работы реальных провайдеров.
 
