@@ -33,9 +33,72 @@
 
 ## Запуск проекта
 
+1. Склонируйте репозиторий.
+2. Запустите проект через Docker Compose:
 ```bash
 docker-compose up -d
 ```
 
+*При старте контейнера `notification_app` автоматически:*
+- Дождется готовности Postgres и RabbitMQ.
+- Выполнит миграции базы данных.
+- Прогонит интеграционные тесты.
+
 ## API Documentation
-*Описание API (Swagger/OpenAPI) или Postman-коллекция будут доступны здесь.*
+
+### 1. Массовая рассылка уведомлений
+**POST** `/api/notifications/bulk`
+
+**Request Body:**
+```json
+{
+    "external_id": "unique_request_id_123",
+    "channel": "email",
+    "priority": "high",
+    "content": "Ваш код подтверждения: 1234",
+    "recipients": [
+        "user1@example.com",
+        "user2@example.com"
+    ]
+}
+```
+- `external_id`: (опционально) ID для дедубликации запроса.
+- `channel`: `email` или `sms`.
+- `priority`: `low`, `normal` или `high`. Сообщения с `high` обрабатываются вне очереди.
+- `recipients`: массив строк (email или номера телефонов).
+
+**Responses:**
+- `202 Accepted`: Уведомления успешно поставлены в очередь.
+- `409 Conflict`: Дубликат запроса (по `external_id`).
+- `422 Unprocessable Entity`: Ошибка валидации.
+
+### 2. История уведомлений подписчика
+**GET** `/api/notifications/history/{recipient}`
+
+**Response:**
+```json
+{
+    "recipient": "user1@example.com",
+    "history": [
+        {
+            "id": 1,
+            "channel": "email",
+            "content": "Ваш код подтверждения: 1234",
+            "status": "sent",
+            "priority": "high",
+            "provider_response": {
+                "provider": "email_mock",
+                "id": "email_66687000",
+                "status": "delivered"
+            },
+            "created_at": "2026-06-11T14:30:00.000000Z"
+        }
+    ]
+}
+```
+
+## Тестирование
+Хотя тесты запускаются автоматически при старте, их можно запустить вручную в любое время:
+```bash
+docker exec -it notification_app php artisan test
+```
