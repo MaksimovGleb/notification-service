@@ -33,11 +33,7 @@
 
     <div class="endpoint">
         <p><span class="method">GET</span> <code>/api/notifications/history/{recipient}</code></p>
-        <p>История уведомлений подписчика.</p>
+        <p>История уведомлений.</p>
     </div>
-
-    <footer>
-        <p>&copy; {{ date('Y') }} Notification Service</p>
-    </footer>
 </body>
 </html>
