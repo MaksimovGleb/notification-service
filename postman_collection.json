@@ -1,0 +1,102 @@
+{
+  "info": {
+    "_postman_id": "f338da1e-b99c-4166-87f4-123c80a92894",
+    "name": "тестовое задание notification-service",
+    "description": "**тестовое задание** notification-service\n\n## API Эндпоинты\n\nPOST `/api/notifications/bulk`\n\nМассовая рассылка уведомлений.\n\n```\n{\n    \"external_id\": \"string\",\n    \"channel\": \"email|sms\",\n    \"priority\": \"low|normal|high\",\n    \"content\": \"string\",\n    \"recipients\": [\"string\"]\n} \n\n ```\n\nGET `/api/notifications/history/{recipient}`\n\nИстория уведомлений.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30192220"
+  },
+  "item": [
+    {
+      "name": "Рассылка уведомлений",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"external_id\": \"test-batch-001\",\n    \"channel\": \"sms\",\n    \"content\": \"Hello, this is a test notification!\",\n    \"recipients\": [\"+79001112233\", \"+79004445566\"],\n    \"priority\": \"normal\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/notifications/bulk",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "notifications",
+            "bulk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "История уведомлений",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/notifications/history/+79001112233",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "notifications",
+            "history",
+            "+79001112233"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "auth_token",
+      "value": "your-sanctum-token-here"
+    }
+  ]
+}
