@@ -58,6 +58,35 @@ services:
       RABBITMQ_PORT: 5672
       QUEUE_CONNECTION: rabbitmq
 
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: notification_scheduler
+    restart: unless-stopped
+    entrypoint: ["php", "artisan", "schedule:work"]
+    volumes:
+      - .:/var/www
+    depends_on:
+      app:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: notification_service
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      QUEUE_CONNECTION: rabbitmq
+
   nginx:
     image: nginx:alpine
     container_name: notification_nginx

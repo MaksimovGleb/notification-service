@@ -99,6 +99,11 @@ return [
                 'queue' => [
                     'declare' => true,
                     'bind' => true,
+                    'durable' => true,
+                    'auto_delete' => false,
+                ],
+                'message' => [
+                    'delivery_mode' => 2, // Persistent
                 ],
             ],
 
